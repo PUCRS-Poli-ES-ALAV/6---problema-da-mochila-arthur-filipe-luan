@@ -3,24 +3,37 @@ public class DistanciaEd {
         int m = s1.length();
         int n = s2.length();
 
+        int custoRemocao = 1;
+        int custoInsercao = 1;
+        int custoSubstituicao = 1;
+        int custoCorrespondencia = 0;
+
+
         int[][] dp = new int[m + 1][n + 1];
 
+
         for (int i = 0; i <= m; i++) {
-            dp[i][0] = i;
-        }
+            dp[i][0] = i * custoRemocao;          }
         for (int j = 0; j <= n; j++) {
-            dp[0][j] = j;
+            dp[0][j] = j * custoInsercao;
         }
 
+
         int iteracoes = 0;
+
 
         for (int i = 1; i <= m; i++) {
             for (int j = 1; j <= n; j++) {
                 iteracoes++;
+
                 if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
                     dp[i][j] = dp[i - 1][j - 1];
                 } else {
-                    dp[i][j] = Math.min(Math.min(dp[i - 1][j - 1], dp[i - 1][j]), dp[i][j - 1]) + 1;
+                    int custoInserir = dp[i][j - 1] + custoInsercao;
+                    int custoRemover = dp[i - 1][j] + custoRemocao;
+                    int custoSubstituir = dp[i - 1][j - 1] + custoSubstituicao;
+
+                    dp[i][j] = Math.min(Math.min(custoInserir, custoRemover), custoSubstituir);
                 }
             }
         }
